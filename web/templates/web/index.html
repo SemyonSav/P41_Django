@@ -5,7 +5,15 @@
     <title>Крутой сайт</title>
 </head>
 <body>
-    <h1>Вы попали на Django сайт. Сочувствую.</h1>
-    <h1 style="color: red">{{number}}</h1>
+    {% for ex in examples %}
+        <b>{{ ex.name }}</b> - {{ ex.age }}
+        <br>
+        <small>
+            <a href="{% url 'delete' ex.id %}">Удалить</a>
+            <a href="{% url 'edit' ex.id %}">Изменить</a>
+        </small>
+        <br>
+    {% endfor %}
+
 </body>
 </html>
