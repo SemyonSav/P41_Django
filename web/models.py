@@ -1,7 +1,7 @@
 from django.db import models
 
 
-class Example(models.Model):
+class User(models.Model):
     name = models.CharField(max_length=100)
     age = models.IntegerField()
 
@@ -9,5 +9,11 @@ class Example(models.Model):
         return self.name
 
     class Meta:
-        verbose_name = "пример"
-        verbose_name_plural = "примеры"
+        verbose_name = "пользователь"
+        verbose_name_plural = "пользователи"
+
+
+class Post(models.Model):
+    title = models.CharField(max_length=100)
+    text = models.CharField(max_length=500)
+    author = models.ForeignKey(User, on_delete=models.CASCADE)

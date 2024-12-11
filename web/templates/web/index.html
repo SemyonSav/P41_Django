@@ -6,7 +6,7 @@
 </head>
 <body>
     {% for ex in examples %}
-        <b>{{ ex.name }}</b> - {{ ex.age }}
+        <a href="{% url 'author' ex.id %}"> <b>{{ ex.name }}</b> </a> - {{ ex.age }}
         <br>
         <small>
             <a href="{% url 'delete' ex.id %}">Удалить</a>

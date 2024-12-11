@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Крутой сайт</title>
+</head>
+<body>
+    {% for post in posts %}
+        <a href="{% url 'post' post.id %}">
+            <b> {{ post.title }} </b>
+        </a> - {{ post.text }}
+        <br>
+        Автор - {{ post.author }}
+        <br>
+    {% endfor %}
+
+</body>
+</html>
