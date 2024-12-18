@@ -1,13 +1,19 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.db.models import Avg, Max, Min, Sum, Count, Q
 
 from .forms import *
 from .models import *
 
 
 def main_view(request):
-    examples = User.objects.all()
-    # examples = User.objects.filter(name__contains='bla')
-    return render(request, 'web/index.html', {'examples': examples})
+    users = User.objects.all()
+    # users = User.objects.raw("SELECT id FROM web_user ORDER BY age DESC")
+    # users = User.objects.filter(name__contains='bla')
+    #users = User.objects.filter(
+    #     Q(name__startswith="r") | ~Q(name__startswith="f")
+    # )
+    # users = User.objects.annotate(min_id=Min("post__id"))
+    return render(request, 'web/index.html', {'examples': users})
 
 
 def add_view(request):
