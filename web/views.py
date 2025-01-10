@@ -1,46 +1,50 @@
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required, permission_required
 from django.shortcuts import render, redirect
-from django.urls import reverse
 
 from .forms import *
 
 
 def main_view(request):
-    sp = ['Олег', 'Андрей', 'Джон']
-    return render(request, "web/index.html", {
-        "sp": sp,
-        'number': 5
-    })
+    return render(request, "web/index.html")
 
 
-def animals_view(request):
-    return render(request, 'web/animals.html')
-
-
-def animal_view(request, animal):
-    age = request.GET.get('age')
-    animals = {
-        'bibizyana': 'Бибизяна прыгает',
-        'lion': 'Лев рычит'
-    }
-    if animal in animals:
-        return render(request, 'web/animal.html', {'animal_info': animals[animal], 'age': age})
-    else:
-        final_url = reverse('animal', args=('bibizyana',))
-        return redirect(final_url)
-
-
-def form_view(request):
-    if request.method == 'POST':
-        # name = request.POST.get('name')
-        # age = request.POST.get('age')
-        form = UserForm(request.POST)
+def register_view(request):
+    form = RegisterForm()
+    is_success = False
+    if request.method == "POST":
+        form = RegisterForm(data=request.POST)
         if form.is_valid():
-            data = form.cleaned_data
-            return render(request, 'web/form.html', {'data': data})
-        else:
-            return render(request, 'web/form.html', {'form': form})
-    form = UserForm()
-    return render(request, 'web/form.html', {
-        'form': form
-    })
+            user = MyUser(
+                username=form.cleaned_data['username'],
+                email=form.cleaned_data['email']
+            )
+            user.set_password(form.cleaned_data['password'])
+            user.save()
+            is_success = True
+    return render(request, 'web/register.html', {'form': form, 'is_success': is_success})
 
+
+def auth_view(request):
+    form = AuthForm()
+    if request.method == "POST":
+        form = AuthForm(data=request.POST)
+        if form.is_valid():
+            user = authenticate(**form.cleaned_data)
+            if user is None:
+                form.add_error(None, "Данные введены некорректно")
+            else:
+                login(request, user)
+                return redirect('main')
+    return render(request, 'web/auth.html', {'form': form})
+
+
+@login_required
+def logout_view(request):
+    logout(request)
+    return redirect('main')
+
+
+@permission_required(perm='web.view_book', raise_exception=True)
+def books_view(request):
+    return render(request, 'web/books.html')

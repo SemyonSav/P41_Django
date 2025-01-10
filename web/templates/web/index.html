@@ -5,7 +5,12 @@
     <title>Крутой сайт</title>
 </head>
 <body>
+
     <h1>Вы попали на Django сайт. Сочувствую.</h1>
-    <h1 style="color: red">{{number}}</h1>
+    {% if user.is_anonymous %}
+        <p>Вы не авторизованы</p>
+    {% else %}
+        <p>Вы - {{ user.username }}</p>
+    {% endif %}
 </body>
 </html>
