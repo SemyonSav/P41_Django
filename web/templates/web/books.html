@@ -6,5 +6,8 @@
 </head>
 <body>
     КНИГИ!!!
+    {% if perms.web.delete_book %}
+        <a>Удалить</a>
+    {% endif %}
 </body>
 </html>

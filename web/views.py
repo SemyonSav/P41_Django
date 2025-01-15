@@ -1,8 +1,11 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required, permission_required
 from django.shortcuts import render, redirect
+from django.contrib.auth.models import Group, Permission
+from django.contrib.contenttypes.models import ContentType
 
 from .forms import *
+from .models import Book
 
 
 def main_view(request):
@@ -21,6 +24,20 @@ def register_view(request):
             )
             user.set_password(form.cleaned_data['password'])
             user.save()
+            group = Group.objects.get(name='reader')
+            # user.groups.set([group,]) Задать группы
+            # user.groups.add(group) Добавить группу
+            # user.groups.remove(group) Удалить группу
+            # user.groups.clear() Удалить все группы
+
+            # p = Permission.objects.get(codename='view_book')
+            # user.user_permissions.set([p, ]) Всё то же самое с разрешениями
+            # user.has_perm(p) Есть ли у пользователя разрешение
+
+            # Создание своего permission
+            # content_type = ContentType.objects.get_for_model(Book)
+            # permission = Permission.objects.create(name='Reader Permission', codename='reader_perm', content_type=content_type)
+
             is_success = True
     return render(request, 'web/register.html', {'form': form, 'is_success': is_success})
 
