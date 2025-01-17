@@ -1,15 +1,17 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Крутой сайт</title>
+    <link rel="stylesheet" href="{% static 'styles/styles.css' %}">
 </head>
 <body>
-
     <h1>Вы попали на Django сайт. Сочувствую.</h1>
     {% if user.is_anonymous %}
         <p>Вы не авторизованы</p>
     {% else %}
+        <img src="{% static 'images/image.jpg' %}">
         <p>Вы - {{ user.username }}</p>
     {% endif %}
 </body>

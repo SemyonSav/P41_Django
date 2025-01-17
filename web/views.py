@@ -9,6 +9,15 @@ from .models import Book
 
 
 def main_view(request):
+    names = ['Title 1', 'title 2', 'title 3']
+    if Book.objects.all().count() == 0:
+        for name in names:
+            book = Book.objects.create(
+                name=name,
+                year=2007
+            )
+            book.save()
+
     return render(request, "web/index.html")
 
 
@@ -24,7 +33,7 @@ def register_view(request):
             )
             user.set_password(form.cleaned_data['password'])
             user.save()
-            group = Group.objects.get(name='reader')
+            #group = Group.objects.get(name='reader')
             # user.groups.set([group,]) Задать группы
             # user.groups.add(group) Добавить группу
             # user.groups.remove(group) Удалить группу
