@@ -8,7 +8,7 @@ from django.db import models
 #
 # class Profile(models.Model):
 #     desc = models.CharField(max_length=100, null=True, blank=True)
-#     user = models.OneToOneField('User', on_delete=models.CASCADE, related_name='profile')
+#     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
 
 class MyUser(AbstractUser):
     desc = models.CharField(max_length=100, null=True, blank=True)
