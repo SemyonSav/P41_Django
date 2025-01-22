@@ -5,9 +5,20 @@
     <title>Title</title>
 </head>
 <body>
-    КНИГИ!!!
-    {% if perms.web.delete_book %}
-        <a>Удалить</a>
-    {% endif %}
+    {% for book in books %}
+        <p>{{ book.name }}</p>
+    {% endfor %}
+    Всего {{ total_count }} книг. {{ books|length }} на странице.
+    <nav>
+        {% if books.has_previous %}
+            <a href="?page=1">в начало</a>
+            <a href="?page={{ books.previous_page_number }}">предыдущая</a>
+        {% endif %}
+        страница {{ books.number }} из {{ books.paginator.num_pages }}
+        {% if books.has_next %}
+            <a href="?page={{ books.next_page_number }}">следующая</a>
+            <a href="?page={{books.paginator.num_pages}}">в конец</a>
+        {% endif %}
+    </nav>
 </body>
 </html>

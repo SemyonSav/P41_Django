@@ -3,13 +3,14 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import Group, Permission
 from django.contrib.contenttypes.models import ContentType
+from django.core.paginator import Paginator
 
 from .forms import *
 from .models import Book
 
 
 def main_view(request):
-    names = ['Title 1', 'title 2', 'title 3']
+    names = ['Title ' + str(i) for i in range(50)]
     if Book.objects.all().count() == 0:
         for name in names:
             book = Book.objects.create(
@@ -73,4 +74,12 @@ def logout_view(request):
 
 @permission_required(perm='web.view_book', raise_exception=True)
 def books_view(request):
-    return render(request, 'web/books.html')
+    books = Book.objects.all()
+    page_number = request.GET.get("page", 1)
+    paginator = Paginator(books, per_page=10)
+    total_count = books.count()
+
+    return render(request, 'web/books.html', {
+        'books': paginator.get_page(page_number),
+        'total_count': total_count
+    })
